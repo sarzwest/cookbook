@@ -61,7 +61,7 @@ INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES 
 INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (19, 4, 4, 12);
 
 -- Surovina
-INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (1, 1, "2014-10-12", 1);
+INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (1, 1, "2014-10-15", 1);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (2, 1, "2014-10-15", 2);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (3, 2, "2014-10-12", 3);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (4, 3, "2014-11-16", 4);
