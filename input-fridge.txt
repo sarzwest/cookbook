@@ -1,4 +1,4 @@
-Chleba,1,2014-10-12,Kaufland
+Chleba,1,2014-10-15,Kaufland
 Olej,2,2014-10-12,Kaufland
 Mouka,1,2014-11-16,Kaufland
 Mleko,1,2014-10-15,Kaufland
