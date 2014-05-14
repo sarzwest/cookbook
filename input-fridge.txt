@@ -1,0 +1,18 @@
+Chleba,1,2014-10-12,Kaufland
+Olej,2,2014-10-12,Kaufland
+Mouka,1,2014-11-16,Kaufland
+Mleko,1,2014-10-15,Kaufland
+Cukr,1,2014-11-16,Kaufland
+Maso,1,2014-10-15,Kaufland
+Chleba,3,2014-11-16,Kaufland
+Olej,1,2014-10-15     ,     Kaufland     
+     Mleko     ,     2     ,     2014-12-17     ,     Kaufland     
+     Cesnek     ,     1     ,     2014-10-15     ,     Vietnamec na rohu     
+     Sul     ,     3     ,     2014-11-16     ,     Vietnamec na rohu     
+     Pepr     ,     2     ,     2014-12-17     ,     Vietnamec na rohu     
+     Worcester     ,     1     ,     2014-10-12     ,     Vietnamec na rohu     
+ Horcice , 1 , 2014-10-15 , Vietnamec na rohu 
+ Strouhanka , 2 , 2014-10-12 , Vietnamec na rohu 
+ Cesnek , 1 , 2014-11-16 , Vietnamec na rohu 
+ Sul , 1 , 2014-11-16 , Vietnamec na rohu 
+ Mouka , 1 , 2014-10-15 , Vietnamec na rohu 
