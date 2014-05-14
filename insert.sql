@@ -15,9 +15,9 @@ INSERT INTO Prodejna(id, místo_nákupu) VALUES (1, "Kaufland");
 INSERT INTO Prodejna(id, místo_nákupu) VALUES (2, "Vietnamec na rohu");
 
 -- Autori receptu
-INSERT INTO Autor(id, autor_jmeno, autor_prijmeni) VALUES (1, "Tomas", "Jiricek");
-INSERT INTO Autor(id, autor_jmeno, autor_prijmeni) VALUES (2, "Jan", "Jakes");
-INSERT INTO Autor(id, autor_jmeno, autor_prijmeni) VALUES (3, "Zdenek", "Pohlreich");
+INSERT INTO Autor(id, autor_jmeno) VALUES (1, "Tomas Jiricek");
+INSERT INTO Autor(id, autor_jmeno) VALUES (2, "Jan Jakes");
+INSERT INTO Autor(id, autor_jmeno) VALUES (3, "Zdenek Pohlreich");
 
 -- Recepty
 INSERT INTO Recept(id, jméno_pokrmu, Autorid) VALUES (1, "Topinky", 1);
@@ -61,21 +61,21 @@ INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES 
 INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (19, 4, 4, 12);
 
 -- Surovina
-INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (1, 0, "2014-10-12", 1);
+INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (1, 1, "2014-10-12", 1);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (2, 1, "2014-10-15", 2);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (3, 2, "2014-10-12", 3);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (4, 3, "2014-11-16", 4);
-INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (5, 0, "2014-11-16", 5);
-INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (6, 0, "2014-10-15", 6);
+INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (5, 1, "2014-11-16", 5);
+INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (6, 1, "2014-10-15", 6);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (7, 1, "2014-11-16", 7);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (8, 1, "2014-10-15", 8);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (9, 2, "2014-12-17", 9);
-INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (10, 0, "2014-10-12", 10);
+INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (10, 1, "2014-10-12", 10);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (11, 1, "2014-10-15", 11);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (12, 2, "2014-10-12", 12);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (13, 3, "2014-11-16", 1);
-INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (14, 0, "2014-11-16", 2);
-INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (15, 0, "2014-10-15", 3);
+INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (14, 1, "2014-11-16", 2);
+INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (15, 1, "2014-10-15", 3);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (16, 1, "2014-11-16", 4);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (17, 1, "2014-10-15", 5);
 INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (18, 2, "2014-12-17", 6);
