@@ -10,7 +10,7 @@
 pass="contain";
 db="jakesjan";
 user="jakesjan";
-echo "$db  $pass  $user";
+
 
 if [ "$1" = "--insert" ];
 then
@@ -191,10 +191,64 @@ then
 	    idSurovinaProdejna=$(echo "$maxSurovinaProdejna" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 	    let idSurovinaProdejna=idSurovinaProdejna+1;
 	    mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Surovina_Prodejna(id, Surovinaid, Prodejnaid) VALUES (\"$idSurovinaProdejna\",\"$idSurovina\", \"$idProdejna\");"
-	    echo "$idSurovinaProdejna, $idSurovina ,  $idProdejna";
-	
+	    
+	    
+	    
 	    IFS=$OIFS;
 	done
+    else
+	exit 1;
     fi;
+
+
+
+#
+# Parametry query
+#
+elif [ "$1" = "--query" ];
+then
+    if [ "$2" = "recipes" ];
+    then
+	jmeno="$3";
+	a=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT Autor.autor_jmeno, Recept.jmeno_pokrmu FROM Autor, Recept WHERE Autorid = Autor.id AND autor_jmeno = '$jmeno'";);
+	if [ "$a" = "" ];
+	then
+	    exit 2;
+	else
+	    echo "$a";
+	fi;
+    elif [ "$2" = "shortest" ];
+    then
+	datum="$3";
+	b=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT result.jmeno_pokrmu FROM ( SELECT jmeno_pokrmu, count(jmeno_pokrmu) AS pocetSurovin FROM Recept, Recept_Ingredience, Ingredience, Surovina WHERE Recept_Ingredience.Ingredienceid = Ingredience.id AND Recept.id = Receptid AND Ingredience.id = Surovina.Ingredienceid AND trvanlivost <= '$datum' group by jmeno_pokrmu order by jmeno_pokrmu asc) AS result order by pocetSurovin desc limit 1";);
+        if [ "$b" = "" ];
+        then
+	    exit 2;
+	else
+	    echo "$b";
+        fi;
+    elif [ "$2" = "buy" ];
+    then
+	recept="$3";
+	c=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT Autor.autor_jmeno, Recept.jmeno_pokrmu FROM Autor, Recept WHERE Autorid = Autor.id AND autor_jmeno = '$jmeno'";);
+#
+#
+#dodelat !!!!!!!
+#
+#
+		    
+	else
+	exit 1;
+    fi;
+
+
+elif [ "$1" = "--variant" ];
+then
+    echo "2";
+elif [ "$1" = "--debug" ];
+then
+    echo "debug";
+else
+    exit 1;
 fi;
 
