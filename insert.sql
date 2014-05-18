@@ -11,8 +11,8 @@
 -- INSERT INTO Surovina_Prodejna(id, Surovinaid, Prodejnaid) VALUES (?, ?, ?);
 
 -- Prodejny
-INSERT INTO Prodejna(id, místo_nákupu) VALUES (1, "Kaufland");
-INSERT INTO Prodejna(id, místo_nákupu) VALUES (2, "Vietnamec na rohu");
+INSERT INTO Prodejna(id, misto_nakupu) VALUES (1, "Kaufland");
+INSERT INTO Prodejna(id, misto_nakupu) VALUES (2, "Vietnamec na rohu");
 
 -- Autori receptu
 INSERT INTO Autor(id, autor_jmeno) VALUES (1, "Tomas Jiricek");
@@ -20,24 +20,24 @@ INSERT INTO Autor(id, autor_jmeno) VALUES (2, "Jan Jakes");
 INSERT INTO Autor(id, autor_jmeno) VALUES (3, "Zdenek Pohlreich");
 
 -- Recepty
-INSERT INTO Recept(id, jméno_pokrmu, Autorid) VALUES (1, "Topinky", 1);
-INSERT INTO Recept(id, jméno_pokrmu, Autorid) VALUES (2, "Palacinky", 2);
-INSERT INTO Recept(id, jméno_pokrmu, Autorid) VALUES (3, "Tatarak", 1);
-INSERT INTO Recept(id, jméno_pokrmu, Autorid) VALUES (4, "Rizek", 3);
+INSERT INTO Recept(id, jmeno_pokrmu, Autorid) VALUES (1, "Topinky", 1);
+INSERT INTO Recept(id, jmeno_pokrmu, Autorid) VALUES (2, "Palacinky", 2);
+INSERT INTO Recept(id, jmeno_pokrmu, Autorid) VALUES (3, "Tatarak", 1);
+INSERT INTO Recept(id, jmeno_pokrmu, Autorid) VALUES (4, "Rizek", 3);
 
 -- Ingredience
-INSERT INTO Ingredience(id, název_ingredience) VALUES (1, "Chleba");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (2, "Cesnek");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (3, "Olej");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (4, "Sul");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (5, "Mouka");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (6, "Mleko");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (7, "Cukr");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (8, "Maso");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (9, "Pepr");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (10, "Worcester");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (11, "Horcice");
-INSERT INTO Ingredience(id, název_ingredience) VALUES (12, "Strouhanka");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (1, "Chleba");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (2, "Cesnek");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (3, "Olej");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (4, "Sul");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (5, "Mouka");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (6, "Mleko");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (7, "Cukr");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (8, "Maso");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (9, "Pepr");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (10, "Worcester");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (11, "Horcice");
+INSERT INTO Ingredience(id, nazev_ingredience) VALUES (12, "Strouhanka");
 
 -- Recept a Ingredience
 INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (1, 2, 1, 1);

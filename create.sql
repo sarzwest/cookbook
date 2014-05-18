@@ -2,11 +2,11 @@
 -- mysql -D ${OSD_DB} -u ${OSD_USERNAME} -p${OSD_PASSWORD} < create.sql
 
 -- create tables
-CREATE TABLE Ingredience (id int(10) NOT NULL AUTO_INCREMENT, název_ingredience varchar(20), PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE Ingredience (id int(10) NOT NULL AUTO_INCREMENT, nazev_ingredience varchar(20), PRIMARY KEY (id)) ENGINE=InnoDB;
 CREATE TABLE Surovina_Prodejna (id int(10) NOT NULL, Surovinaid int(10) NOT NULL, Prodejnaid int(10) NOT NULL, PRIMARY KEY (id, Surovinaid, Prodejnaid)) ENGINE=InnoDB;
-CREATE TABLE Prodejna (místo_nákupu varchar(20), id int(10) NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE Prodejna (misto_nakupu varchar(20), id int(10) NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)) ENGINE=InnoDB;
 CREATE TABLE Surovina (id int(10) NOT NULL AUTO_INCREMENT, kusuVLednici int(10), trvanlivost date, Ingredienceid int(10) NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB;
-CREATE TABLE Recept (id int(10) NOT NULL AUTO_INCREMENT, jméno_pokrmu varchar(20), Autorid int(10) NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB;
+CREATE TABLE Recept (id int(10) NOT NULL AUTO_INCREMENT, jmeno_pokrmu varchar(20), Autorid int(10) NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB;
 CREATE TABLE Autor (id int(10) NOT NULL AUTO_INCREMENT, autor_jmeno varchar(20), PRIMARY KEY (id)) ENGINE=InnoDB;
 CREATE TABLE Recept_Ingredience (id int(10) NOT NULL, potrebaKusu int(10), Receptid int(10) NOT NULL, Ingredienceid int(10) NOT NULL, PRIMARY KEY (id, Receptid, Ingredienceid)) ENGINE=InnoDB;
 -- create foreign keys and constraints
