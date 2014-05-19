@@ -1,4 +1,8 @@
 #!/bin/bash
+#Autor: Jan Jakes, Tomas Jiricek
+#E-mail: jakesjan@fel.cvut.cz, jiricto2@fel.cvut.cz
+#Skript pro obsluhu databaze kucharskych receptu.
+#
 #Usage: cookbook.sh --insert recipes < input-recipes.txt
 #Usage: cookbook.sh --insert fridge < input-fridge.txt
 #       cookbook.sh --query recipes <author>
@@ -37,6 +41,10 @@ then
 		then
 		    autor="$x";
 		    exist=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT id FROM Autor WHERE autor_jmeno = '$autor';");
+		    if [ $? -ne 0 ];
+		    then
+			exit 3;
+		    fi;
 		    #
 		    #Kontrola zda Autor uz existuje;
 		    #
@@ -46,10 +54,18 @@ then
 		    # Pokud neexistuje pridam do databaze.
 		    #
 			maxAutor=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT MAX(id) FROM Autor;"); #vrati nejvyssi id
+			if [ $? -ne 0 ];
+			then
+			    exit 3;
+			fi;
 			idAutor=$(echo "$maxAutor" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 			let idAutor=idAutor+1;
 			echo "Novy Autor: $autor  id: $idAutor"
 			mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Autor(id, autor_jmeno) VALUES (\"$idAutor\", \"$autor\");";
+			if [ $? -ne 0 ];
+			then
+			    exit 3;
+			fi;
 		    else
 		    #
 		    # Autor existuje.
@@ -61,15 +77,27 @@ then
 		    # Pridani receptu do databaze.
 		    #
 		    maxRecept=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT MAX(id) FROM Recept;"); #vrati hodnotu max id
+		    if [ $? -ne 0 ];
+		    then
+			exit 3;
+		    fi;
 		    idRecept=$(echo "$maxRecept" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 		    let idRecept=idRecept+1;
 		    echo "Novy recept: $recept  id: $idRecept  idAutor: $idAutor";
 		    mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Recept(id, jmeno_pokrmu, Autorid) VALUES (\"$idRecept\",\"$recept\", \"$idAutor\");"
+		    if [ $? -ne 0 ];
+		    then
+			exit 3;
+		    fi;
 		else
 		    if [ $(($count % 2)) -eq 0 ];
 		    then
 			ingredience="$x";
 			existIng=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT id FROM Ingredience WHERE nazev_ingredience = '$ingredience';");
+			if [ $? -ne 0 ];
+			then
+			    exit 3;
+			fi;
 			#
 			# Kontrola zda existuje Ingredience
 			#
@@ -79,9 +107,17 @@ then
 			    # Ingredience neni v databazi tak ji pridam.
 			    #
 			    maxIng=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT MAX(id) FROM Ingredience;"); #vrati nejvyssi id
+			    if [ $? -ne 0 ];
+			    then
+				exit 3;
+			    fi;
 			    idIngredience=$(echo "$maxIng" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 			    let idIngredience=idIngredience+1;
 			    mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Ingredience(id, nazev_ingredience) VALUES (\"$idIngredience\", \"$ingredience\");";
+			    if [ $? -ne 0 ];
+			    then
+				exit 3;
+			    fi;
 			else
 			    #
 			    # Ingredience je v databazi
@@ -94,9 +130,17 @@ then
 			#
 			pocetIng="$x";
 			maxReceptIng=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT MAX(id) FROM Recept_Ingredience;"); #vrati hodnotu max id
+			if [ $? -ne 0 ];
+			then
+			    exit 3;
+			fi;
 			idReceptIng=$(echo "$maxReceptIng" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 			let idReceptIng=idReceptIng+1;
 			mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (\"$idReceptIng\",\"$pocetIng\", \"$idRecept\", \"$idIngredience\");"
+			if [ $? -ne 0 ];
+			then
+			    exit 3;
+			fi;
 		    fi;
 		fi;
 		let count++;
@@ -139,15 +183,27 @@ then
 	    # Kontrola zda existuje obchod
 	    #
 	    existProdejna=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT id FROM Prodejna WHERE misto_nakupu = '$prodejna';");
+	    if [ $? -ne 0 ];
+	    then
+		exit 3;
+	    fi;
 	    if [ "$existProdejna" = "" ];
 	    then
 	    #
 	    # Pridam prodejnu do databaze
 	    #
 		maxProdejna=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT MAX(id) FROM Prodejna;"); #vrati nejvyssi id
+		if [ $? -ne 0 ];
+		then
+		    exit 3;
+		fi;
 		idProdejna=$(echo "$maxProdejna" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 		let idProdejna=idProdejna+1;
 		mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Prodejna(misto_nakupu, id) VALUES (\"$prodejna\", \"$idProdejna\");";
+		if [ $? -ne 0 ];
+		then
+		    exit 3;
+		fi;
 	    else
 	    #
 	    # Najdu prodejnu v databazi
@@ -159,15 +215,27 @@ then
 	    # Kontrola zda existuje Ingedience
 	    #
 	    existIng=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT id FROM Ingredience WHERE nazev_ingredience = '$surovina';");
+	    if [ $? -ne 0 ];
+		then
+		    exit 3;
+		fi;
 	    if [ "$existIng" = "" ];
 	    then
 	    #
 	    # Pridam Ingredienci do databaze
 	    #
 		maxIng=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT MAX(id) FROM Ingredience;"); #vrati nejvyssi id
+		if [ $? -ne 0 ];
+		then
+		    exit 3;
+		fi;
 		idIng=$(echo "$maxIng" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 		let idIng=idIng+1;
 		mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Ingredience(id, nazev_ingredience) VALUES (\"$idIng\", \"$surovina\");";
+		if [ $? -ne 0 ];
+		then
+		    exit 3;
+		fi;
 	    else
 	    #
 	    # Najdu Ingredienci v databazi
@@ -180,20 +248,33 @@ then
 	    # Pridani suroviny
 	    #
 	    maxSurovina=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT MAX(id) FROM Surovina;"); #vrati hodnotu max id
+	    if [ $? -ne 0 ];
+	    then
+	        exit 3;
+	    fi;
 	    idSurovina=$(echo "$maxSurovina" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 	    let idSurovina=idSurovina+1;
 	    mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (\"$idSurovina\",\"$pocetIng\", \"$datum\", \"$idIng\");"
-	
+	    if [ $? -ne 0 ];
+		then
+		    exit 3;
+		fi;
 	    #
 	    # Pridani Surovina_Prodejna
 	    #
 	    maxSurovinaProdejna=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT MAX(id) FROM Surovina_Prodejna;"); #vrati hodnotu max id
+	    if [ $? -ne 0 ];
+	    then
+	        exit 3;
+	    fi;
 	    idSurovinaProdejna=$(echo "$maxSurovinaProdejna" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 	    let idSurovinaProdejna=idSurovinaProdejna+1;
 	    mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Surovina_Prodejna(id, Surovinaid, Prodejnaid) VALUES (\"$idSurovinaProdejna\",\"$idSurovina\", \"$idProdejna\");"
-	    
-	    
-	    
+	    if [ $? -ne 0 ];
+	    then
+	        exit 3;
+	    fi;
+
 	    IFS=$OIFS;
 	done
     else
@@ -211,6 +292,10 @@ then
     then
 	jmeno="$3";
 	a=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT Autor.autor_jmeno, Recept.jmeno_pokrmu FROM Autor, Recept WHERE Autorid = Autor.id AND autor_jmeno = '$jmeno'";);
+	if [ $? -ne 0 ];
+	then
+	    exit 3;
+	fi;
 	if [ "$a" = "" ];
 	then
 	    exit 2;
@@ -221,6 +306,10 @@ then
     then
 	datum="$3";
 	b=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT result.jmeno_pokrmu FROM ( SELECT jmeno_pokrmu, count(jmeno_pokrmu) AS pocetSurovin FROM Recept, Recept_Ingredience, Ingredience, Surovina WHERE Recept_Ingredience.Ingredienceid = Ingredience.id AND Recept.id = Receptid AND Ingredience.id = Surovina.Ingredienceid AND trvanlivost <= '$datum' group by jmeno_pokrmu order by jmeno_pokrmu asc) AS result order by pocetSurovin desc limit 1";);
+        if [ $? -ne 0 ];
+	then
+	    exit 3;
+	fi;
         if [ "$b" = "" ];
         then
 	    exit 2;
@@ -231,13 +320,11 @@ then
     then
 	recept="$3";
 	c=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT Autor.autor_jmeno, Recept.jmeno_pokrmu FROM Autor, Recept WHERE Autorid = Autor.id AND autor_jmeno = '$jmeno'";);
-#
-#
-#dodelat !!!!!!!
-#
-#
-		    
-	else
+	if [ $? -ne 0 ];
+	then
+	    exit 3;
+	fi;
+    else
 	exit 1;
     fi;
 
