@@ -15,18 +15,25 @@ pass="contain";
 db="jakesjan";
 user="jakesjan";
 
+p1="$1";	#napr insert, query
+p2="$2";	#napr recipes, fridge
+p3="$3";	#napr <Autor> <Datum>
+debug="--debug";
 
-if [ "$1" = "--insert" ];
+if [ "$p1" = "--insert" ];
 then
     #
     # Pridani receptu
     #
-    if [ "$2" = "recipes" ];
+    if [ "$p2" = "recipes" ];
     then
 	while read lineData 
 	do
-	    echo "---------------------------------------------";
-	    echo "$lineData";
+	    if [ "$debug" = "--debug" ];	#DEBUG vypis
+	    then
+		echo "---------------------------------------------";
+		echo "Nacteny radek:  $lineData";
+	    fi;
 	    let count=0;
 	    OIFS=$IFS;   # !!! NEMAZAT !!!!
 	    IFS=",";
@@ -60,18 +67,24 @@ then
 			fi;
 			idAutor=$(echo "$maxAutor" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 			let idAutor=idAutor+1;
-			echo "Novy Autor: $autor  id: $idAutor"
 			mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Autor(id, autor_jmeno) VALUES (\"$idAutor\", \"$autor\");";
 			if [ $? -ne 0 ];
 			then
 			    exit 3;
+			fi;
+			if [ $debug = "--debug" ];	# DEBUG vypis
+			then
+			    echo "Novy Autor: $autor  id: $idAutor";
 			fi;
 		    else
 		    #
 		    # Autor existuje.
 		    #
 			idAutor=$(echo "$exist" | tr -d "id\n ");
-			echo "Existujici autor: $autor  id: $idAutor";
+			if [ $debug = "--debug" ];	# DEBUG vypis
+			then
+			    echo "Existujici autor: $autor  id: $idAutor";
+			fi;
 		    fi;
 		    #
 		    # Pridani receptu do databaze.
@@ -83,11 +96,14 @@ then
 		    fi;
 		    idRecept=$(echo "$maxRecept" | tr -d "MAX(id) \n ");  #vyreze hodnotu max id
 		    let idRecept=idRecept+1;
-		    echo "Novy recept: $recept  id: $idRecept  idAutor: $idAutor";
 		    mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Recept(id, jmeno_pokrmu, Autorid) VALUES (\"$idRecept\",\"$recept\", \"$idAutor\");"
 		    if [ $? -ne 0 ];
 		    then
 			exit 3;
+		    fi;
+		    if [ $debug = "--debug" ];	# DEBUG vypis
+		    then
+			echo "Novy recept: $recept  id: $idRecept  idAutor: $idAutor";
 		    fi;
 		else
 		    if [ $(($count % 2)) -eq 0 ];
@@ -118,11 +134,19 @@ then
 			    then
 				exit 3;
 			    fi;
+			    if [ $debug = "--debug" ];	# DEBUG vypis
+			    then
+				echo "Nova ingredience: $ingredience  id: $idIngredience";
+			    fi;
 			else
 			    #
 			    # Ingredience je v databazi
 			    #
 			    idIngredience=$(echo "$existIng" | tr -d "id \n ");
+			    if [ $debug = "--debug" ];	# DEBUG vypis
+			    then
+				echo "Existujici Ingredience: $ingredience  id: $idIngredience";
+			    fi;
 			fi;
 		    else
 			#
@@ -141,6 +165,10 @@ then
 			then
 			    exit 3;
 			fi;
+			if [ $debug = "--debug" ];	# DEBUG vypis
+			then
+			    echo "Novy Recept_Ingredience id: $idReceptIng  Pocet ingredienci: $pocetIng Recept id: $idRecept Ingredience id: $idIngredience";
+			fi;
 		    fi;
 		fi;
 		let count++;
@@ -152,11 +180,15 @@ then
     #
     # Pridani veci do lednice
     #
-    elif [ "$2" = "fridge" ];
+    elif [ "$p2" = "fridge" ];
     then
 	while read lineData
 	do
-	    #echo "$lineData";
+	    if [ "$debug" = "--debug" ];
+	    then
+		echo "------------------------------------------------------";
+		echo "Zadany radek: $lineData";
+	    fi;
 	    OIFS=$IFS;   ## !!!! NEMAZAT  !!!!
 	    IFS=",";
 	    let count=0;
@@ -204,11 +236,19 @@ then
 		then
 		    exit 3;
 		fi;
+		if [ "$debug" = "--debug" ];
+		then
+		    echo "Nova prodejna: $prodejna id: $idProdejna";
+		fi;
 	    else
 	    #
 	    # Najdu prodejnu v databazi
 	    #
 		idProdejna=$(echo "$existProdejna" | tr -d "id \n ");
+		if [ "$debug" = "--debug" ];
+		then
+		    echo "Existujici prodejna: $prodejna id: $idProdejna";
+		fi;
 	    fi;
 	    
 	    #
@@ -236,11 +276,19 @@ then
 		then
 		    exit 3;
 		fi;
+		if [ "$debug" = "--debug" ];
+		then
+		    echo "Nova ingredience: $surovina id: $idIng";
+		fi;
 	    else
 	    #
 	    # Najdu Ingredienci v databazi
 	    #
 		idIng=$(echo "$existIng" | tr -d "id \n ");
+		if [ "$debug" = "--debug" ];
+		then
+		    echo "Existujici ingredience: $surovina id: $idIng";
+		fi;
 	    fi;
 	    
 	    
@@ -256,9 +304,13 @@ then
 	    let idSurovina=idSurovina+1;
 	    mysql -D "$db" -u "$user" -p"$pass" -e "INSERT INTO Surovina(id, kusuVLednici, trvanlivost, Ingredienceid) VALUES (\"$idSurovina\",\"$pocetIng\", \"$datum\", \"$idIng\");"
 	    if [ $? -ne 0 ];
-		then
-		    exit 3;
-		fi;
+	    then
+		exit 3;
+	    fi;
+	    if [ "$debug" = "--debug" ];
+	    then
+		echo "Nova surovina id: $isSurovina Kusu v lednici: $pocetIng Trvanlivost: $datum idIngredience: $idIng";
+	    fi;
 	    #
 	    # Pridani Surovina_Prodejna
 	    #
@@ -274,6 +326,11 @@ then
 	    then
 	        exit 3;
 	    fi;
+	    if [ "$debug" = "--debug" ];
+	    then
+		echo "Nova Surovina_Prodejna id: $isSurovinaProdejna idSurovina: $idSurovina idProdejna: $idProdejna ";
+	    fi;
+
 
 	    IFS=$OIFS;
 	done
@@ -286,11 +343,11 @@ then
 #
 # Parametry query
 #
-elif [ "$1" = "--query" ];
+elif [ "$p1" = "--query" ];
 then
-    if [ "$2" = "recipes" ];
+    if [ "$p2" = "recipes" ];
     then
-	jmeno="$3";
+	jmeno="$p3";
 	a=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT Autor.autor_jmeno, Recept.jmeno_pokrmu FROM Autor, Recept WHERE Autorid = Autor.id AND autor_jmeno = '$jmeno'";);
 	if [ $? -ne 0 ];
 	then
@@ -302,9 +359,9 @@ then
 	else
 	    echo "$a";
 	fi;
-    elif [ "$2" = "shortest" ];
+    elif [ "$p2" = "shortest" ];
     then
-	datum="$3";
+	datum="$p3";
 	b=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT result.jmeno_pokrmu FROM ( SELECT jmeno_pokrmu, count(jmeno_pokrmu) AS pocetSurovin FROM Recept, Recept_Ingredience, Ingredience, Surovina WHERE Recept_Ingredience.Ingredienceid = Ingredience.id AND Recept.id = Receptid AND Ingredience.id = Surovina.Ingredienceid AND trvanlivost <= '$datum' group by jmeno_pokrmu order by jmeno_pokrmu asc) AS result order by pocetSurovin desc limit 1";);
         if [ $? -ne 0 ];
 	then
@@ -316,9 +373,9 @@ then
 	else
 	    echo "$b";
         fi;
-    elif [ "$2" = "buy" ];
+    elif [ "$p2" = "buy" ];
     then
-	recept="$3";
+	recept="$p3";
 	c=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT Autor.autor_jmeno, Recept.jmeno_pokrmu FROM Autor, Recept WHERE Autorid = Autor.id AND autor_jmeno = '$jmeno'";);
 	if [ $? -ne 0 ];
 	then
@@ -329,12 +386,9 @@ then
     fi;
 
 
-elif [ "$1" = "--variant" ];
+elif [ "$p1" = "--variant" ];
 then
     echo "2";
-elif [ "$1" = "--debug" ];
-then
-    echo "debug";
 else
     exit 1;
 fi;
