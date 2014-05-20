@@ -15,7 +15,7 @@ pass="contain";
 db="jakesjan";
 user="jakesjan";
 
-if [ $OSD_DB != "" ]; then
+if [ "$OSD_DB" != "" ]; then
 	db="$OSD_DB";
 	user="$OSD_USERNAME";
 	pass="$OSD_PASSWORD";
@@ -463,6 +463,63 @@ then
 elif [ "$p1" = "--variant" ];
 then
     echo "2";
+elif [ "$p1" = "--help" ];
+then
+    echo "Nápověda k skriptu pro plneni databaze kucharskych receptu."
+    echo "NÁZEV:";
+    echo -e "\tcookbook - Cook book, služba pro plneni databaze."
+    echo ""
+    echo "SYNOPSE:"
+    echo -e "\tcookbook --help"
+    echo -e "\tcookbook --insert fridge"
+    echo -e "\tcookbook --insert recipes"
+    echo -e "\tcookbook --query recipes <Autor>"
+    echo -e "\tcookbook --query shortest <Datun>"
+    echo -e "\tcookbook --query buy <Recept>"
+    echo ""
+    echo "POPIS:"
+    echo -e "\tProgram přidává data do databáze podle zvoleneho přepínače. Dále vrací některé složitější dotazi nad databazí. "
+    echo ""
+    echo -e "\tProgram čte data ze standartního vstupu. Data se zadavaní v jednom rádku ve spravném formatu."
+    echo ""
+    echo ""
+    echo -e "\tNěkolik použitelných přepínáčů:"
+    echo -e ""
+    echo -e "\t --help - zobrazí nápovědu"
+    echo -e ""
+    echo -e "\t --insert frigde - naplní databazi věcmi patřicími do lednice. Formát zadavavani veci do lednice je \"surovina, množství, datum trvanlivosti, místo nákupu\"."
+    echo -e ""
+    echo -e "\t --insert recepies - prida do databaze recept. Formát zadavavani receptu je \"jméno_pokrmu, autor_receptu, surovina1, množství1, surovina2, množství2, .....\"."
+    echo -e ""
+    echo -e "\t --query recipes <autor> - vybere v databazi všechny recepty daneho <Autora> a vypíše je na standartní výstup."
+    echo -e ""
+    echo -e "\t --query shortest <datum> - vybere v databazi recept, který spotřebuje nejvíc surovin s trvanlivostí do zadaného data (včetně). V případě shody počtu surovin u více receptů vytiskněte ten z nich abecedně první. Recept vypíše je na standartní výstup."
+    echo -e ""
+    echo -e "\t --query buy <recept> - vybere v databazi co se musí dokoupit na daný recept. Vypište názvy surovin spolu s množstvím k dokoupení."
+    echo -e ""
+    echo -e "\t --debug - vypisuje ladící vypisy."
+    echo -e ""
+    echo -e "\t --variant - vypiše variantu programu."
+    echo -e ""
+    echo ""
+    echo -e "\tNavratová hodnota:"
+    echo -e ""
+    echo -e "\t 0 - pokud vše proběhne v pořádku"
+    echo -e ""
+    echo -e "\t 1 - pokud jsou zadány chybné vstupní parametry"
+    echo -e ""
+    echo -e "\t 2 - pokud je prázdná odpověď z SQL serveru"
+    echo -e ""
+    echo -e "\t 3 - chyba připojení k databázi / k serveru"
+    echo ""
+    echo ""
+    echo "AUTOR:"
+    echo -e "\t Napsal Jan Jakeš a Tomáš Jiříček"
+    echo -e ""
+    echo "REPORTOVÁNÍ CHYB:"
+    echo -e "\t Nalezené chyby skriptu cookbook zasílejte na MrJohn@seznam.cz"
+    echo ""
+    echo ""
 else
     exit 1;
 fi;
