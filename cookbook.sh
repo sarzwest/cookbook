@@ -3,22 +3,90 @@
 #E-mail: jakesjan@fel.cvut.cz, jiricto2@fel.cvut.cz
 #Skript pro obsluhu databaze kucharskych receptu.
 #
-#Usage: cookbook.sh --insert recipes < input-recipes.txt
-#Usage: cookbook.sh --insert fridge < input-fridge.txt
-#       cookbook.sh --query recipes <author>
-#       cookbook.sh --query shortest <date>
-#       cookbook.sh --query buy <recipe>
+#Usage: cookbook.sh [--debug] --insert recipes < input-recipes.txt
+# 	cookbook.sh [--debug] --insert fridge < input-fridge.txt
+#       cookbook.sh [--debug] --query recipes <author>
+#       cookbook.sh [--debug] --query shortest <date>
+#       cookbook.sh [--debug] --query buy <recipe>
 #       cookbook.sh --variant
-#       cookbook.sh --debug
+#       cookbook.sh -h|--help
 
 pass="contain";
 db="jakesjan";
 user="jakesjan";
 
-p1="$1";	#napr insert, query
-p2="$2";	#napr recipes, fridge
-p3="$3";	#napr <Autor> <Datum>
-debug="--debug";
+if [ $OSD_DB != "" ]; then
+	db="$OSD_DB";
+	user="$OSD_USERNAME";
+	pass="$OSD_PASSWORD";
+fi
+
+p1="";		#napr --insert, --query
+p2="";		#napr recipes, fridge
+p3="";		#napr <Autor> <Datum>
+debug=""; 	#napr --debug
+help=""; 	#napr --help
+variant="2";
+
+#parsing input arguments BEGIN
+args=`getopt -n "$0" -o "h" --long "help,debug,insert:,query:,variant" -- "$@" end`
+eval set -- "$args"
+
+while true ; do
+	case "$1" in
+		--debug) 
+			debug="$1" ; 
+			shift ;;
+		--insert) 
+			p1="$1" ;
+			case "$2" in
+				fridge) 
+					p2="$2" ;
+					shift 2 ;;
+				recipes)
+					p2="$2" ;
+					shift 2 ;;
+				*)
+					echo "Input arguments error for: $2" >&2 ; exit 10;
+			esac ;;
+		--query) 
+			p1="$1" ; 
+			case "$2" in
+				recipes)
+					p2="$2" ;
+					p3="$4" ;
+					shift 2 ;;
+				shortest)
+					p2="$2" ;
+					p3="$4" ;
+					shift 2 ;;
+				buy)
+					p2="$2" ;
+					p3="$4" ;
+					shift 2 ;;
+				*)
+					echo "Input arguments error for: $2" >&2 ; exit 11;
+			esac ;;
+		-h|--help) 
+			help="--help" ; 
+			shift ;;
+		--variant)
+			echo "$variant";
+			exit 0;;
+		--) 	
+			shift ;;
+		end) 
+			shift ; 
+			break ;;
+		*) 
+			shift ;;
+	esac
+done
+
+if [ "$debug" = "--debug" ]; then
+	echo "Input parameters parsed succesfully.";
+fi
+#parsing input arguments END
 
 if [ "$p1" = "--insert" ];
 then
@@ -362,7 +430,7 @@ then
     elif [ "$p2" = "shortest" ];
     then
 	datum="$p3";
-	b=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT result.jmeno_pokrmu FROM ( SELECT jmeno_pokrmu, count(jmeno_pokrmu) AS pocetSurovin FROM Recept, Recept_Ingredience, Ingredience, Surovina WHERE Recept_Ingredience.Ingredienceid = Ingredience.id AND Recept.id = Receptid AND Ingredience.id = Surovina.Ingredienceid AND trvanlivost <= '$datum' group by jmeno_pokrmu order by jmeno_pokrmu asc) AS result order by pocetSurovin desc limit 1";);
+	b=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT result.jmeno_pokrmu as 'Jmeno pokrmu' FROM ( SELECT jmeno_pokrmu, count(jmeno_pokrmu) AS pocetSurovin FROM Recept, Recept_Ingredience, Ingredience, Surovina WHERE Recept_Ingredience.Ingredienceid = Ingredience.id AND Recept.id = Receptid AND Ingredience.id = Surovina.Ingredienceid AND trvanlivost <= '$datum' group by jmeno_pokrmu order by jmeno_pokrmu asc) AS result order by pocetSurovin desc limit 1";);
         if [ $? -ne 0 ];
 	then
 	    exit 3;
@@ -376,10 +444,16 @@ then
     elif [ "$p2" = "buy" ];
     then
 	recept="$p3";
-	c=$(mysql -D "$db" -u "$user" -p"$pass" -e "SELECT Autor.autor_jmeno, Recept.jmeno_pokrmu FROM Autor, Recept WHERE Autorid = Autor.id AND autor_jmeno = '$jmeno'";);
+	c=$(mysql -D "$db" -u "$user" -p"$pass" -e "select nazev_ingredience as 'Nazev', (potrebaKusu - sum(kusuVLednici)) as 'Dokoupit' from Recept, Recept_Ingredience, Ingredience, Surovina where jmeno_pokrmu = '$recept' and Recept.id = Recept_Ingredience.Receptid and Recept_Ingredience.Ingredienceid = Ingredience.id and Surovina.Ingredienceid = Ingredience.id group by nazev_ingredience having Dokoupit > 0";);
 	if [ $? -ne 0 ];
 	then
 	    exit 3;
+	fi;
+	if [ "$c" = "" ];
+	then
+		exit 2;
+	else
+		echo "$c"
 	fi;
     else
 	exit 1;

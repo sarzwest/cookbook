@@ -40,7 +40,8 @@ INSERT INTO Ingredience(id, nazev_ingredience) VALUES (11, "Horcice");
 INSERT INTO Ingredience(id, nazev_ingredience) VALUES (12, "Strouhanka");
 
 -- Recept a Ingredience
-INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (1, 2, 1, 1);
+-- INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (1, 2, 1, 1); nastaven jiny pocet kusu, aby u dotazu c chybel chleba
+INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (1, 7, 1, 1);
 INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (2, 2, 1, 2);
 INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (3, 2, 1, 3);
 INSERT INTO Recept_Ingredience(id, potrebaKusu, Receptid, Ingredienceid) VALUES (4, 2, 1, 4);
