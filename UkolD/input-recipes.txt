@@ -1,4 +1,0 @@
-Topinky,Tomas,Chleba,7,Cesnek,2,Olej,2,Sul,2
-Tatarak,Tomas,Cesnek,1,Sul,1,Maso,3,Pepr,3,Worcester,3,Horcice,3
-Palacinky,Jan,Olej,2,Sul,1,Mouka,1,Mleko,1,Cukr,1
-Rizek, Zdenek,Olej,3,Sul,4,Maso,4,Strouhanka,4
